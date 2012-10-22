@@ -7,9 +7,9 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+   <a href="@Url.Action("Create")" class="btn btn-success"><i class="icon-user icon-white"></i> Create New</a>
 </p>
-<table>
+<table class="table">
     <tr>
         <th>ID</th>
         <th>Title</th>
@@ -18,19 +18,34 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model.Positions)
-{
-    <tr>
-        <td>@item.Id</td>
-        <td>@item.Title</td>
-        <td>@item.PublishedOn.ToString()</td>
-        <td>@item.ClosingDate.ToShortDateString()</td>
-        <td>@item.Title
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model.Positions)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Title
+
+                @if (item.Published)
+                {
+                    <span class="label label-success">Published</span>
+                }
+                else
+                {
+                     <span class="label label-default">Published</span>
+                }
+
+            </td>
+            <td>@item.PublishedOn</td>
+            <td>@item.ClosingDate
+
+                
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { }, new { @class = "btn btn-mini btn-info"/* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-mini btn-danger" })
+                 @Html.ActionLink("Publish", "Publish", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-mini btn-success" })
+            </td>
+        </tr>
+    }
 
 </table>
