@@ -1,10 +1,12 @@
-﻿@model Recruit_o_matic.ViewModels.Admin.IndexVM
+﻿@model Recruit_o_matic.ViewModels.Admin.HomeViewModel
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="row-fluid">
+    <div class="span8">
+        <h2>Index</h2>
 
 <p>
    <a href="@Url.Action("Create")" class="btn btn-success"><i class="icon-user icon-white"></i> Create New</a>
@@ -18,7 +20,7 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model.Positions)
+    @foreach (var item in Model.Vacancies)
     {
         <tr>
             <td>@item.Id</td>
@@ -51,3 +53,14 @@
     }
 
 </table>
+
+    </div>
+
+    <div class="span4">
+        other stuff
+
+    </div>
+
+</div>
+
+

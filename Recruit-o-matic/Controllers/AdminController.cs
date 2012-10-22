@@ -16,9 +16,9 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Index()
         {
-            var viewModel = new IndexVM()
+            var viewModel = new HomeViewModel()
             {
-                Positions = RavenSession.Query<Position>().ToList()
+                Vacancies = RavenSession.Query<Vacancy>().OrderBy(x => x.CreatedOn).ToList()
             };
 
             return View(viewModel);
@@ -44,12 +44,13 @@ namespace Recruit_o_matic.Controllers
         // POST: /Admin/Create
 
         [HttpPost]
-        public ActionResult Create(Position position)
+        public ActionResult Create(Vacancy vacancy)
         {
             try
             {
                 // TODO: Add insert logic here
-                RavenSession.Store(position);                
+                vacancy.CreatedOn = DateTime.Now;
+                RavenSession.Store(vacancy);                
 
                 return RedirectToAction("Index");
             }
@@ -64,20 +65,20 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Edit(string id)
         {
-            var position = RavenSession.Load<Position>(id);
+            var vacancy = RavenSession.Load<Vacancy>(id);
             
-            return View(position);
+            return View(vacancy);
         }
 
         //
         // POST: /Admin/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(Position position)
+        public ActionResult Edit(Vacancy vacancy)
         {
             try
             {
-                RavenSession.Store(position);
+                RavenSession.Store(vacancy);
 
                 return RedirectToAction("Index");
             }
@@ -92,8 +93,8 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Delete(string id)
         {
-            var position = RavenSession.Load<Position>(id);
-            return View(position);
+            var vacancy = RavenSession.Load<Vacancy>(id);
+            return View(vacancy);
         }
 
         //
@@ -104,8 +105,8 @@ namespace Recruit_o_matic.Controllers
         {
             try
             {
-                var position = RavenSession.Load<Position>(id);
-                RavenSession.Delete<Position>(position);
+                var vacancy = RavenSession.Load<Vacancy>(id);
+                RavenSession.Delete<Vacancy>(vacancy);
 
                 return RedirectToAction("Index");
             }
@@ -116,9 +117,14 @@ namespace Recruit_o_matic.Controllers
         }
         public ActionResult Publish(string id)
         {
-            var position = RavenSession.Load<Position>(id);
+            var vacancy = RavenSession.Load<Vacancy>(id);
 
-            position.Published = position.Published ? false : true;
+            vacancy.Published = vacancy.Published ? false : true;
+
+            if (vacancy.Published && vacancy.PublishedOn == null)
+            {
+                vacancy.PublishedOn = DateTime.Now;
+            }
 
             return RedirectToAction("Index");
 

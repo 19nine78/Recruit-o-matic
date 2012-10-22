@@ -6,8 +6,8 @@ using System.Web;
 
 namespace Recruit_o_matic.ViewModels.Admin
 {
-    public class IndexVM
+    public class HomeViewModel
     {
-        public IList<Position> Positions { get; set; }
+        public IList<Vacancy> Vacancies { get; set; }
     }
 }
