@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Raven.Client.Document;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,9 @@ namespace Recruit_o_matic
 
     public class MvcApplication : System.Web.HttpApplication
     {
+
+        public static DocumentStore Store;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -21,6 +25,10 @@ namespace Recruit_o_matic
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Store = new DocumentStore { ConnectionStringName = "RavenDB" };
+            //Store.Conventions.ShouldCacheRequest = (url) => false;
+            Store.Initialize();
         }
     }
 }
