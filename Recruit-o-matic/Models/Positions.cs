@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Recruit_o_matic.Models
 {
-    public class Positions
+    public class Position
     {
         public string Id { get; set; }
         public string Title { get; set; }
