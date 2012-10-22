@@ -27,7 +27,7 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/Details/5
 
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
             return View();
         }
@@ -62,20 +62,22 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/Edit/5
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            var position = RavenSession.Load<Position>(id);
+            
+            return View(position);
         }
 
         //
         // POST: /Admin/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Position position)
         {
             try
             {
-                // TODO: Add update logic here
+                RavenSession.Store(position);
 
                 return RedirectToAction("Index");
             }
@@ -88,20 +90,22 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/Delete/5
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            return View();
+            var position = RavenSession.Load<Position>(id);
+            return View(position);
         }
 
         //
         // POST: /Admin/Delete/5
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult DeleteConfirm(string id)
         {
             try
             {
-                // TODO: Add delete logic here
+                var position = RavenSession.Load<Position>(id);
+                RavenSession.Delete<Position>(position);
 
                 return RedirectToAction("Index");
             }
@@ -109,6 +113,16 @@ namespace Recruit_o_matic.Controllers
             {
                 return View();
             }
+        }
+        public ActionResult Publish(string id)
+        {
+            var position = RavenSession.Load<Position>(id);
+
+            position.Published = position.Published ? false : true;
+
+            return RedirectToAction("Index");
+
+            
         }
     }
 }

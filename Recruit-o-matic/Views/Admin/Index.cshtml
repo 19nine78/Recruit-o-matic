@@ -30,20 +30,22 @@
                 }
                 else
                 {
-                     <span class="label label-default">Published</span>
+                     <span class="label label-default">Not Published</span>
                 }
 
             </td>
             <td>@item.PublishedOn</td>
             <td>@item.ClosingDate
-
-                
+                @if (DateTime.Now - item.ClosingDate <= new System.TimeSpan(3, 0, 0, 0))
+                {
+                    <span class="label label-warning">Closing Soon</span>
+                }              
 
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { }, new { @class = "btn btn-mini btn-info"/* id=item.PrimaryKey */ })
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-mini btn-danger" })
-                 @Html.ActionLink("Publish", "Publish", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-mini btn-success" })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-mini btn-info"/* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-mini btn-danger" })
+                 @Html.ActionLink("Publish", "Publish", new { id = item.Id }, new { @class = "btn btn-mini btn-success" })
             </td>
         </tr>
     }

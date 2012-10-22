@@ -1,0 +1,61 @@
+﻿@model Recruit_o_matic.Models.Position
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Position</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PublishedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PublishedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ClosingDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClosingDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Published)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Published)
+    </div>
+</fieldset>
+@using (Html.BeginForm("DeleteConfirm", "Admin", new {Id=Model.Id }))
+{
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
