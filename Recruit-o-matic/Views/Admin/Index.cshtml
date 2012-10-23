@@ -17,6 +17,7 @@
                 <th>Title</th>
                 <th>Published</th>
                 <th>Closing Date</th>
+                <th>Applicants</th>
                 <th></th>
             </tr>
 
@@ -44,6 +45,7 @@
                         }
 
                     </td>
+                    <td>@Model.Counts.Where(x => x.VacancyId == item.Id).Select(x => x.Count).FirstOrDefault()</td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-mini btn-info" })
                         @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-mini btn-danger" })

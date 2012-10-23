@@ -17,11 +17,20 @@ namespace Recruit_o_matic.Controllers
         // GET: /Admin/
 
         public ActionResult Index()
-        {          
+        {
 
             var viewModel = new HomeViewModel()
             {
-                Vacancies = RavenSession.Query<Vacancy>().OrderBy(x => x.CreatedOn).ToList()
+                //TODO: A bit fragile, will break down if more than 128 vacancies (Raven soft limit)
+                // vacancies needs to be pages & counts tied to it.
+                
+                Vacancies = RavenSession.Query<Vacancy>()
+                                        .OrderBy(x => x.CreatedOn)
+                                        .ToList(),
+                
+                Counts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
+                                                     .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
+                                                     .ToList()
             };
 
             return View(viewModel);
@@ -33,12 +42,13 @@ namespace Recruit_o_matic.Controllers
         public ActionResult Details(string id)
         {
             var vacancy = RavenSession.Include<Applicant>(x => x.VacancyId).Load<Vacancy>(id);
-            var applicants = RavenSession.Query<Applicant>().Where(x => x.VacancyId == id);
+            var applicants = RavenSession.Query<Applicant>().Where(x => x.VacancyId == id).ToList(); 
 
             var viewModel = new DetailsViewModel()
             {
                 vacancy = vacancy,
-                applicants = applicants.ToList()
+                applicants = applicants
+
             };
 
             return View(viewModel);
@@ -62,7 +72,7 @@ namespace Recruit_o_matic.Controllers
             {
                 // TODO: Add insert logic here
                 vacancy.CreatedOn = DateTime.Now;
-                RavenSession.Store(vacancy);                
+                RavenSession.Store(vacancy);
 
                 return RedirectToAction("Index");
             }
@@ -78,7 +88,7 @@ namespace Recruit_o_matic.Controllers
         public ActionResult Edit(string id)
         {
             var vacancy = RavenSession.Load<Vacancy>(id);
-            
+
             return View(vacancy);
         }
 
@@ -140,7 +150,7 @@ namespace Recruit_o_matic.Controllers
 
             return RedirectToAction("Index");
 
-            
+
         }
     }
 }

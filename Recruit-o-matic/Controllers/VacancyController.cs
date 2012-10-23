@@ -29,10 +29,10 @@ namespace Recruit_o_matic.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
-        public ActionResult Apply(Applicant applicant)
+        [HttpPost]        
+        public ActionResult Apply(string VacancyId, [Bind(Prefix = "currentApplicant")]Applicant applicant)
         {
-
+            applicant.VacancyId = VacancyId;
             applicant.ApplicationDate = DateTime.Now;
             RavenSession.Store(applicant);
 

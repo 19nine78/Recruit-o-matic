@@ -32,7 +32,7 @@ namespace Recruit_o_matic
             //Store.Conventions.ShouldCacheRequest = (url) => false;
             Store.Initialize();
 
-            IndexCreation.CreateIndexes(typeof(Vacancies_WithApplicants).Assembly, Store);
+            IndexCreation.CreateIndexes(typeof(Vacancies_WithApplicantCount).Assembly, Store);
         }
     }
 }
