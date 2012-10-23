@@ -1,4 +1,6 @@
 ﻿using Raven.Client.Document;
+using Raven.Client.Indexes;
+using Recruit_o_matic.Models.RavenDBIndexes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,8 @@ namespace Recruit_o_matic
             Store = new DocumentStore { ConnectionStringName = "RavenDB" };
             //Store.Conventions.ShouldCacheRequest = (url) => false;
             Store.Initialize();
+
+            IndexCreation.CreateIndexes(typeof(Vacancies_WithApplicants).Assembly, Store);
         }
     }
 }

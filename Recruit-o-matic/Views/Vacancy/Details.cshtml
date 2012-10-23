@@ -1,0 +1,56 @@
+﻿@model Recruit_o_matic.ViewModels.DetailsViewModel
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Vacancy</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.currentVacancy.Title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.currentVacancy.Title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.currentVacancy.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.currentVacancy.Description)
+    </div> 
+        
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.currentVacancy.ClosingDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.currentVacancy.ClosingDate)
+    </div>
+
+    <hr />
+
+    @using (Html.BeginForm("Apply","Vacancy",new {VacancyId = Model.currentVacancy.Id }))
+    {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Applicant</legend>        
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.currentApplicant.FullName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.currentApplicant.FullName)
+            @Html.ValidationMessageFor(model => model.currentApplicant.FullName)
+        </div>        
+
+        <p>
+            <input class="btn btn-large btn-success" type="submit" value="Apply" />
+        </p>
+    </fieldset>
+    }
+
+    
+</fieldset>
+<p>
+    @Html.ActionLink("Back to List", "Index", new { }, new {@class="btn btn-large" })
+</p>

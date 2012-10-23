@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Raven.Client;
+using Raven.Client.Linq;
 using Recruit_o_matic.Models;
 using Recruit_o_matic.ViewModels.Admin;
 
@@ -18,7 +19,9 @@ namespace Recruit_o_matic.Controllers
         {
             var viewModel = new HomeViewModel()
             {
-                Vacancies = RavenSession.Query<Vacancy>().OrderBy(x => x.CreatedOn).ToList()
+                Vacancies = RavenSession.Query<Vacancy>()
+                
+                .OrderBy(x => x.CreatedOn).ToList()
             };
 
             return View(viewModel);
@@ -29,7 +32,16 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Details(string id)
         {
-            return View();
+            var vacancy = RavenSession.Include<Applicant>(x => x.VacancyId).Load<Vacancy>(id);
+            var applicants = RavenSession.Query<Applicant>().Where(x => x.VacancyId == id);
+
+            var viewModel = new DetailsViewModel()
+            {
+                vacancy = vacancy,
+                applicants = applicants.ToList()
+            };
+
+            return View(viewModel);
         }
 
         //

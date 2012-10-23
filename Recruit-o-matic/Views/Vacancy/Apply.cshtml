@@ -1,0 +1,39 @@
+﻿@model Recruit_o_matic.Models.Applicant
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Applicant</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VacancyId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.VacancyId)
+            @Html.ValidationMessageFor(model => model.VacancyId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FullName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FullName)
+            @Html.ValidationMessageFor(model => model.FullName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApplicationDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ApplicationDate)
+            @Html.ValidationMessageFor(model => model.ApplicationDate)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+

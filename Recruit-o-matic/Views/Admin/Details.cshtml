@@ -1,0 +1,43 @@
+﻿@model Recruit_o_matic.ViewModels.Admin.DetailsViewModel
+
+<div class="row-fluid">
+    <div class="span8">
+<h2>Details</h2>
+        <p>
+            <a href="@Url.Action("","Admin")" class="btn btn-success"><i class="icon-arrow-left icon-white"></i>Back</a>
+        </p>
+
+<table class="table">
+    <caption>Applicants for @Model.vacancy.Title</caption>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Application Date</th>
+        <th></th>
+
+    </tr>
+</thead>
+
+@foreach (var applicant in Model.applicants)
+{
+    <tr>
+        <td>@applicant.FullName</td>
+        <td>@applicant.ApplicationDate</td>
+        <td></td>
+
+    </tr>
+}
+
+
+
+</table>
+        </div>
+
+    <div class="span4">
+        <h3>@Model.vacancy.Title</h3>
+        <p>Published: @Model.vacancy.PublishedOn<br />
+        Closing Date: @Model.vacancy.ClosingDate.ToShortDateString()</p>
+        <h4>Details</h4>
+        <p>@Model.vacancy.Description</p>
+    </div>
+    </div>
