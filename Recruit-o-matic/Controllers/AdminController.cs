@@ -7,6 +7,7 @@ using Raven.Client;
 using Raven.Client.Linq;
 using Recruit_o_matic.Models;
 using Recruit_o_matic.ViewModels.Admin;
+using Recruit_o_matic.Models.RavenDBIndexes;
 
 namespace Recruit_o_matic.Controllers
 {
@@ -16,12 +17,11 @@ namespace Recruit_o_matic.Controllers
         // GET: /Admin/
 
         public ActionResult Index()
-        {
+        {          
+
             var viewModel = new HomeViewModel()
             {
-                Vacancies = RavenSession.Query<Vacancy>()
-                
-                .OrderBy(x => x.CreatedOn).ToList()
+                Vacancies = RavenSession.Query<Vacancy>().OrderBy(x => x.CreatedOn).ToList()
             };
 
             return View(viewModel);
