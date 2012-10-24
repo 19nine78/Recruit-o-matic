@@ -1,101 +1,99 @@
 ﻿@model Recruit_o_matic.ViewModels.DetailsViewModel
 
-<h2>Details</h2>
 
-<fieldset>
-    <legend>Vacancy</legend>
+<div class="row-fluid">
+    <div class="span6 well">
 
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.currentVacancy.Title)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.currentVacancy.Title)
-    </div>
+        <h1>
+            @Html.DisplayFor(model => model.currentVacancy.Title)
 
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.currentVacancy.Description)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.currentVacancy.Description)
-    </div>
+        </h1>
+        <p>
+            <strong>@Html.DisplayNameFor(model => model.currentVacancy.ClosingDate)</strong> @Model.currentVacancy.ClosingDate.ToShortDateString()
+            @if (Model.currentVacancy.ClosingDate - DateTime.Now <= new System.TimeSpan(3, 0, 0, 0))
+            {
 
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.currentVacancy.ClosingDate)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.currentVacancy.ClosingDate)
-    </div>
+                <span class="label label-warning">Closing Soon!</span>
+            }
+        </p>
+        <h2>
+            @Html.DisplayNameFor(model => model.currentVacancy.Description)
+        </h2>
+        <p>
+            @Html.Raw(Model.currentVacancy.Description.Replace("\n\r", "</p><p>"))
+        </p>
 
-    <hr />
+    </div>
+    <div class="span6">
+        @using (Html.BeginForm("Apply", "Vacancy", new { VacancyId = Model.currentVacancy.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+        {
 
-    @using (Html.BeginForm("Apply", "Vacancy", new { VacancyId = Model.currentVacancy.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
-    {
-        <div class="text-error">
-            @Html.ValidationSummary(true)
-        </div>
+            <div class="text-error">
+                @Html.ValidationSummary(true)
+            </div>
        
-        <fieldset>
-            <legend>Apply</legend>
+            <fieldset>
+                <legend>Apply</legend>
 
-            <div class="control-group">
-                @Html.LabelFor(model => model.currentApplicant.FullName, new { @class = "control-label" })
-                <div class="controls">
-                    @Html.EditorFor(model => model.currentApplicant.FullName)
-                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.FullName)</span>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.currentApplicant.FullName, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.currentApplicant.FullName)
+                        <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.FullName)</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                @Html.LabelFor(model => model.currentApplicant.Address, new { @class = "control-label" })
-                <div class="controls">
-                    @Html.EditorFor(model => model.currentApplicant.Address)
-                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.Address)</span>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.currentApplicant.Address, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.currentApplicant.Address)
+                        <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.Address)</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                @Html.LabelFor(model => model.currentApplicant.TelephoneNumber, new { @class = "control-label" })
-                <div class="controls">
-                    @Html.EditorFor(model => model.currentApplicant.TelephoneNumber)
-                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.TelephoneNumber)</span>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.currentApplicant.TelephoneNumber, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.currentApplicant.TelephoneNumber)
+                        <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.TelephoneNumber)</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                @Html.LabelFor(model => model.currentApplicant.EmailAddress, new { @class = "control-label" })
-                <div class="controls">
-                    @Html.EditorFor(model => model.currentApplicant.EmailAddress)
-                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.EmailAddress)</span>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.currentApplicant.EmailAddress, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.currentApplicant.EmailAddress)
+                        <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.EmailAddress)</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                @Html.LabelFor(model => model.currentApplicant.CoverNote, new { @class = "control-label" })
-                <div class="controls">
-                    @Html.EditorFor(model => model.currentApplicant.CoverNote)
-                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.CoverNote)</span>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.currentApplicant.CoverNote, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.currentApplicant.CoverNote)
+                        <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.CoverNote)</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-               @Html.LabelFor(model => model.currentApplicant.File, new { @class = "control-label" })
-                <div class="controls">
-                   <input name="currentApplicant.File" id="File" type="file"/>
-                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.File)</span>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.currentApplicant.File, new { @class = "control-label" })
+                    <div class="controls">
+                        <input name="currentApplicant.File" id="File" type="file" />
+                        <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.File)</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-actions">
-                <input class="btn btn-large btn-success" type="submit" value="Apply" />
-            </div>
-        </fieldset>
-    }
+                <div class="form-actions">
+                     <a class="btn" href="@Url.Action("Index","Home")"><i class="icon-arrow-left"></i> Not For Me</a>
+                    <input class="btn btn-success" type="submit" value="Apply" />
+                </div>
+            </fieldset>
+        }
+    </div>
 
 
-</fieldset>
-<p>
-    @Html.ActionLink("Back to List", "Index", new { }, new { @class = "btn btn-large" })
-</p>
+
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
