@@ -1,16 +1,19 @@
 ﻿@model Recruit_o_matic.ViewModels.Admin.HomeViewModel
 
-@{
-    ViewBag.Title = "Index";
-}
+
+<div class="hero-unit">
+        <h1>Recruit-O-Matic Portal</h1>
+               <p>Welcome [[username]]. There are currently <strong>@Model.Vacancies.Where(x => x.Published).Count()</strong> published vacancies with a total of <strong>@Model.Counts.Sum(x => x.Count)</strong> applicants.</p>
+<p>
+            <a href="@Url.Action("Create")" class="btn btn-success"><i class="icon-user icon-white"></i>Create New Vacancy</a>
+        </p>
+      </div>
 
 <div class="row-fluid">
     <div class="span12">
-        <h2>Index</h2>
-
-        <p>
-            <a href="@Url.Action("Create")" class="btn btn-success"><i class="icon-user icon-white"></i>Create New Vacancy</a>
-        </p>
+        
+ 
+        
         <table class="table">
             <caption>Current Published Vacancies</caption>
             <tr>
@@ -35,32 +38,28 @@
                     </td>
                     <td>
                         <div class="btn-group">
-                        <a class="btn btn-mini btn-info" href="@Url.Action("Edit", new { id = item.Id })"><i class="icon-edit icon-white"></i>&nbsp;Edit</a>
-                        <a class="btn btn-mini btn-danger" href="@Url.Action("Delete", new { id = item.Id })"><i class="icon-trash icon-white"></i>&nbsp;Delete</a>
-                        <a class="btn btn-mini btn-success" href="@Url.Action("Details", new { id = item.Id })"><i class="icon-info-sign icon-white"></i>&nbsp;Details</a>
-                        
-                         @if (item.Published)
-                        {
-                           <a class="btn btn-mini btn-inverse" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-pause icon-white"></i>&nbsp;Suspend</a>
-                             
-                        }
-                        else
-                        {
-                            <a class="btn btn-mini" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-play"></i>&nbsp;Publish</a>
-                            
-                        }
-                        
-                        
-                        </div>
+                            <a class="btn btn-mini btn-info" href="@Url.Action("Edit", new { id = item.Id })"><i class="icon-edit icon-white"></i>&nbsp;Edit</a>
+                            <a class="btn btn-mini btn-danger" href="@Url.Action("Delete", new { id = item.Id })"><i class="icon-trash icon-white"></i>&nbsp;Delete</a>
+                            <a class="btn btn-mini btn-success" href="@Url.Action("Details", new { id = item.Id })"><i class="icon-info-sign icon-white"></i>&nbsp;Details</a>
 
-                       
+                            @if (item.Published)
+                            {
+                                <a class="btn btn-mini btn-inverse" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-pause icon-white"></i>&nbsp;Suspend</a>
+                             
+                            }
+                            else
+                            {
+                                <a class="btn btn-mini" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-play"></i>&nbsp;Publish</a>
+                            
+                            }
+                        </div>
                     </td>
                 </tr>
             }
 
         </table>
 
-    </div>   
+    </div>
 
 </div>
 

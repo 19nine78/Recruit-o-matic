@@ -24,16 +24,29 @@ namespace Recruit_o_matic.Controllers
             var viewModel = new DetailsViewModel()
             {
                 currentVacancy = vacancy,
-                currentApplicant = new Applicant()
+                currentApplicant = new ApplyViewModel()
             };
             return View(viewModel);
         }
 
         [HttpPost]        
-        public ActionResult Apply(string VacancyId, [Bind(Prefix = "currentApplicant")]Applicant applicant)
+        public ActionResult Apply(string VacancyId, [Bind(Prefix = "currentApplicant")]ApplyViewModel applicantVM)
         {
-            applicant.VacancyId = VacancyId;
-            applicant.ApplicationDate = DateTime.Now;
+
+            //need to do some validation on the file (type etc.) then save it somewhere
+
+            //Explore AutoMapper for doing the below
+            var applicant = new Applicant()
+            {
+                VacancyId = VacancyId,
+                FullName = applicantVM.FullName,
+                Address = applicantVM.Address,
+                EmailAddress = applicantVM.EmailAddress,
+                CoverNote = applicantVM.CoverNote,
+                TelephoneNumber = applicantVM.TelephoneNumber,
+                ApplicationDate = DateTime.Now
+            };
+                        
             RavenSession.Store(applicant);
 
             return RedirectToAction("Index");

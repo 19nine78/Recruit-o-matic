@@ -6,21 +6,21 @@
     <legend>Vacancy</legend>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.currentVacancy.Title)
+        @Html.DisplayNameFor(model => model.currentVacancy.Title)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.currentVacancy.Title)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.currentVacancy.Description)
+        @Html.DisplayNameFor(model => model.currentVacancy.Description)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.currentVacancy.Description)
-    </div> 
-        
+    </div>
+
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.currentVacancy.ClosingDate)
+        @Html.DisplayNameFor(model => model.currentVacancy.ClosingDate)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.currentVacancy.ClosingDate)
@@ -28,29 +28,75 @@
 
     <hr />
 
-    @using (Html.BeginForm("Apply","Vacancy",new {VacancyId = Model.currentVacancy.Id }))
+    @using (Html.BeginForm("Apply", "Vacancy", new { VacancyId = Model.currentVacancy.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
     {
-    @Html.ValidationSummary(true)
-       
-    <fieldset>
-        <legend>Applicant</legend>        
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.currentApplicant.FullName)
+        <div class="text-error">
+            @Html.ValidationSummary(true)
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.currentApplicant.FullName)
-            @Html.ValidationMessageFor(model => model.currentApplicant.FullName)
-        </div>        
+       
+        <fieldset>
+            <legend>Apply</legend>
 
-        <p>
-            <input class="btn btn-large btn-success" type="submit" value="Apply" />
-        </p>
-    </fieldset>
+            <div class="control-group">
+                @Html.LabelFor(model => model.currentApplicant.FullName, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.currentApplicant.FullName)
+                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.FullName)</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(model => model.currentApplicant.Address, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.currentApplicant.Address)
+                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.Address)</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(model => model.currentApplicant.TelephoneNumber, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.currentApplicant.TelephoneNumber)
+                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.TelephoneNumber)</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(model => model.currentApplicant.EmailAddress, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.currentApplicant.EmailAddress)
+                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.EmailAddress)</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(model => model.currentApplicant.CoverNote, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.currentApplicant.CoverNote)
+                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.CoverNote)</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+               @Html.LabelFor(model => model.currentApplicant.File, new { @class = "control-label" })
+                <div class="controls">
+                   <input name="currentApplicant.File" id="File" type="file"/>
+                    <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.File)</span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <input class="btn btn-large btn-success" type="submit" value="Apply" />
+            </div>
+        </fieldset>
     }
 
-    
+
 </fieldset>
 <p>
-    @Html.ActionLink("Back to List", "Index", new { }, new {@class="btn btn-large" })
+    @Html.ActionLink("Back to List", "Index", new { }, new { @class = "btn btn-large" })
 </p>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

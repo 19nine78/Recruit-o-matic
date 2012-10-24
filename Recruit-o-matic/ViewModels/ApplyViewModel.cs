@@ -1,14 +1,14 @@
 ﻿using Recruit_o_matic.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace Recruit_o_matic.ViewModels
 {
-    public class DetailsViewModel
+    public class ApplyViewModel : Applicant
     {
-        public Vacancy currentVacancy { get; set; }
-        public ApplyViewModel currentApplicant { get; set; }
+        public HttpPostedFileBase File { get; set; }
     }
 }
