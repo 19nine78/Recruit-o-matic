@@ -11,5 +11,5 @@ namespace Recruit_o_matic.ViewModels.Admin
     {
         public IList<Vacancy> Vacancies { get; set; }
         public IList<Vacancies_WithApplicantCount.VacancyApplicantCountResult> Counts { get; set; }
-    }
+    }    
 }

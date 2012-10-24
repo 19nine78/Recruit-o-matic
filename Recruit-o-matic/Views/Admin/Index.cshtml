@@ -9,7 +9,7 @@
         <h2>Index</h2>
 
         <p>
-            <a href="@Url.Action("Create")" class="btn btn-success"><i class="icon-user icon-white"></i>Create New</a>
+            <a href="@Url.Action("Create")" class="btn btn-success"><i class="icon-user icon-white"></i>Create New Vacancy</a>
         </p>
         <table class="table">
             <tr>
@@ -35,7 +35,6 @@
                         {
                             <span class="label label-default">Not Published</span>
                         }
-
                     </td>
                     <td>@item.PublishedOn</td>
                     <td>@item.ClosingDate.ToShortDateString()
@@ -43,7 +42,6 @@
                         {
                             <span class="label label-warning">Closing Soon</span>
                         }
-
                     </td>
                     <td>@Model.Counts.Where(x => x.VacancyId == item.Id).Select(x => x.Count).FirstOrDefault()</td>
                     <td>

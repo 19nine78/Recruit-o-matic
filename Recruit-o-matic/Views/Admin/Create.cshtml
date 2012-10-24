@@ -6,45 +6,43 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) {
-    @Html.ValidationSummary(true)
-
+@using (Html.BeginForm("Create", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <div class="text-error">
+        @Html.ValidationSummary(true)
+    </div>
     <fieldset>
         <legend>Vacancy</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Title)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Title)
-            @Html.ValidationMessageFor(model => model.Title)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Description)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Description)
-            @Html.ValidationMessageFor(model => model.Description)
-        </div>              
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ClosingDate)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ClosingDate)
-            @Html.ValidationMessageFor(model => model.ClosingDate)
+        <div class="control-group">
+            @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Title)
+                <span class="text-error">@Html.ValidationMessageFor(model => model.Title)</span>
+            </div>
         </div>
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Description)
+                <span class="text-error">@Html.ValidationMessageFor(model => model.Description)</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.ClosingDate, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.ClosingDate)
+                <span class="text-error">@Html.ValidationMessageFor(model => model.ClosingDate)</span>
+            </div>
+        </div>
+        <div class="form-actions">
+             <a class="btn" href="@Url.Action("Index")"><i class="icon-arrow-left"></i> Back to List</a>
+            <input class="btn btn-success" type="submit" value="Create Vacancy" />
+        </div>
     </fieldset>
+    
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

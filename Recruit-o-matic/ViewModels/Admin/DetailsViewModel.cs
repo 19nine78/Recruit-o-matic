@@ -8,7 +8,7 @@ namespace Recruit_o_matic.ViewModels.Admin
 {
     public class DetailsViewModel
     {
-        public Vacancy vacancy { get; set; }
-        public IList<Applicant> applicants { get; set; }
+        public Vacancy Vacancy { get; set; }
+        public IList<Applicant> Applicants { get; set; }
     }
 }

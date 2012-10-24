@@ -16,21 +16,22 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/
 
+        //TODO: A bit fragile, will break down if more than 128 vacancies (Raven soft limit)
+        // vacancies needs to be pages & counts tied to it. 
         public ActionResult Index()
         {
+            var vacancies = RavenSession.Query<Vacancy>()
+                                        .OrderBy(x => x.CreatedOn)
+                                        .ToList();
+
+            var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
+                                                     .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
+                                                     .ToList();
 
             var viewModel = new HomeViewModel()
             {
-                //TODO: A bit fragile, will break down if more than 128 vacancies (Raven soft limit)
-                // vacancies needs to be pages & counts tied to it.
-                
-                Vacancies = RavenSession.Query<Vacancy>()
-                                        .OrderBy(x => x.CreatedOn)
-                                        .ToList(),
-                
-                Counts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
-                                                     .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
-                                                     .ToList()
+                Vacancies = vacancies,
+                Counts = applicantCounts
             };
 
             return View(viewModel);
@@ -41,14 +42,18 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Details(string id)
         {
-            var vacancy = RavenSession.Include<Applicant>(x => x.VacancyId).Load<Vacancy>(id);
-            var applicants = RavenSession.Query<Applicant>().Where(x => x.VacancyId == id).ToList(); 
+
+            var vacancy = RavenSession.Include<Applicant>(x => x.VacancyId)
+                                      .Load<Vacancy>(id);
+
+            var applicants = RavenSession.Query<Applicant>()
+                                         .Where(x => x.VacancyId == id)
+                                         .ToList();
 
             var viewModel = new DetailsViewModel()
             {
-                vacancy = vacancy,
-                applicants = applicants
-
+                Vacancy = vacancy,
+                Applicants = applicants
             };
 
             return View(viewModel);
@@ -68,17 +73,27 @@ namespace Recruit_o_matic.Controllers
         [HttpPost]
         public ActionResult Create(Vacancy vacancy)
         {
-            try
-            {
-                // TODO: Add insert logic here
-                vacancy.CreatedOn = DateTime.Now;
-                RavenSession.Store(vacancy);
+            var tmp = ModelState.IsValid;
 
-                return RedirectToAction("Index");
-            }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                try
+                {
+                    vacancy.CreatedOn = DateTime.Now;
+                    RavenSession.Store(vacancy);
+                    throw new NotSupportedException();
+
+                    //return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ModelState.AddModelError(string.Empty, "There was a problem saving the Vacancy to the Database.");
+                    return View(vacancy);
+                }
+            }
+            else
+            {
+                return View(vacancy);
             }
         }
 
@@ -144,9 +159,7 @@ namespace Recruit_o_matic.Controllers
             vacancy.Published = vacancy.Published ? false : true;
 
             if (vacancy.Published && vacancy.PublishedOn == null)
-            {
                 vacancy.PublishedOn = DateTime.Now;
-            }
 
             return RedirectToAction("Index");
 
