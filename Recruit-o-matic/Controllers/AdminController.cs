@@ -81,9 +81,7 @@ namespace Recruit_o_matic.Controllers
                 {
                     vacancy.CreatedOn = DateTime.Now;
                     RavenSession.Store(vacancy);
-                    throw new NotSupportedException();
-
-                    //return RedirectToAction("Index");
+                    return RedirectToAction("Index");
                 }
                 catch
                 {
@@ -113,15 +111,21 @@ namespace Recruit_o_matic.Controllers
         [HttpPost]
         public ActionResult Edit(Vacancy vacancy)
         {
-            try
+            if (ModelState.IsValid)
             {
-                RavenSession.Store(vacancy);
-
-                return RedirectToAction("Index");
+                try
+                {
+                    RavenSession.Store(vacancy);
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
+            else
             {
-                return View();
+                return View(vacancy);
             }
         }
 

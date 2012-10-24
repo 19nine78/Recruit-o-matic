@@ -5,7 +5,7 @@
 }
 
 <div class="row-fluid">
-    <div class="span8">
+    <div class="span12">
         <h2>Index</h2>
 
         <p>
@@ -18,14 +18,13 @@
                 <th>Title</th>
                 <th>Published</th>
                 <th>Closing Date</th>
-                <th>Applicants</th>
                 <th></th>
             </tr>
 
             @foreach (var item in Model.Vacancies)
             {
                 <tr>
-                    <td>@item.Id</td>
+                    <td><span class="badge badge-info">@Model.Counts.Where(x => x.VacancyId == item.Id).Select(x => x.Count).FirstOrDefault()</span> @item.Id</td>
                     <td>@item.Title</td>
                     <td>@item.PublishedOn</td>
                     <td>@item.ClosingDate.ToShortDateString()
@@ -34,34 +33,34 @@
                             <span class="label label-warning">Closing Soon</span>
                         }
                     </td>
-                    <td>@Model.Counts.Where(x => x.VacancyId == item.Id).Select(x => x.Count).FirstOrDefault()</td>
-                    <td style="text-wrap:none">
+                    <td>
                         <div class="btn-group">
                         <a class="btn btn-mini btn-info" href="@Url.Action("Edit", new { id = item.Id })"><i class="icon-edit icon-white"></i>&nbsp;Edit</a>
                         <a class="btn btn-mini btn-danger" href="@Url.Action("Delete", new { id = item.Id })"><i class="icon-trash icon-white"></i>&nbsp;Delete</a>
                         <a class="btn btn-mini btn-success" href="@Url.Action("Details", new { id = item.Id })"><i class="icon-info-sign icon-white"></i>&nbsp;Details</a>
-</div>
-
-                       @* @if (item.Published)
+                        
+                         @if (item.Published)
                         {
-                            @Html.ActionLink("Suspend", "Publish", new { id = item.Id }, new { @class = "btn btn-mini btn-warning" });
+                           <a class="btn btn-mini btn-inverse" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-pause icon-white"></i>&nbsp;Suspend</a>
+                             
                         }
                         else
                         {
-                            @Html.ActionLink("Publish", "Publish", new { id = item.Id }, new { @class = "btn btn-mini btn-success" });
-                        }*@
+                            <a class="btn btn-mini" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-play"></i>&nbsp;Publish</a>
+                            
+                        }
+                        
+                        
+                        </div>
+
+                       
                     </td>
                 </tr>
             }
 
         </table>
 
-    </div>
-
-    <div class="span4">
-        
-
-    </div>
+    </div>   
 
 </div>
 

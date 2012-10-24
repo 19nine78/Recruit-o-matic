@@ -8,9 +8,7 @@
         @Html.ValidationSummary(true)
     </div>
     <fieldset>
-        <legend>Edit Vacancy</legend>
-
-        
+        <legend>Edit Vacancy</legend>        
 
         <div class="control-group">
             @Html.LabelFor(model => model.Title, new { @class = "control-label" })
@@ -43,10 +41,6 @@
         @Html.HiddenFor(model => model.Id)
     </fieldset>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
