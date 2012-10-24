@@ -23,7 +23,16 @@
                 <tr>
                     <td>@applicant.FullName</td>
                     <td>@applicant.ApplicationDate</td>
-                    <td></td>
+                    <td>
+                        @if (applicant.AttachementId != null)
+                        {
+                        <a class="btn btn-primary btn-mini" href="@Url.Action("GetCV", new { id = applicant.AttachementId })"><i class="icon-download icon-white"></i>&nbsp;Download CV</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-mini disabled"><i class="icon-warning-sign"></i>&nbsp;No CV Attached</a>
+                        }
+                    </td>
 
                 </tr>
             }

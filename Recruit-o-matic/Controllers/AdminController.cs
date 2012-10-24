@@ -8,6 +8,9 @@ using Raven.Client.Linq;
 using Recruit_o_matic.Models;
 using Recruit_o_matic.ViewModels.Admin;
 using Recruit_o_matic.Models.RavenDBIndexes;
+using Raven.Json.Linq;
+using System.IO;
+using Raven.Abstractions.Data;
 
 namespace Recruit_o_matic.Controllers
 {
@@ -166,8 +169,38 @@ namespace Recruit_o_matic.Controllers
                 vacancy.PublishedOn = DateTime.Now;
 
             return RedirectToAction("Index");
+        }
 
+        public ActionResult GetCV(string id)
+        {
 
+            Attachment attachement;
+
+            try
+            {
+                attachement = MvcApplication.Store.DatabaseCommands.GetAttachment(id);
+            }
+            catch
+            {
+                return HttpNotFound("Atachement " + id + " was not found :(");
+            }
+
+            return File(ReadFully(attachement.Data()), attachement.Metadata["ContentType"].ToString(), id.Replace("/", "-"));
+            
+        }
+
+        private static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
         }
     }
 }

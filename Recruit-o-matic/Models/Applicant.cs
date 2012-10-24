@@ -43,5 +43,8 @@ namespace Recruit_o_matic.Models
         public string CoverNote { get; set; }       
         
         public DateTime ApplicationDate { get; set; }
+
+        public string AttachementId { get; set; }
+        public string DownloadFileName { get; set; }
     }
 }

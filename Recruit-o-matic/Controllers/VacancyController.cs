@@ -1,7 +1,9 @@
-﻿using Recruit_o_matic.Models;
+﻿using Raven.Json.Linq;
+using Recruit_o_matic.Models;
 using Recruit_o_matic.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -29,11 +31,11 @@ namespace Recruit_o_matic.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]        
+        [HttpPost]
         public ActionResult Apply(string VacancyId, [Bind(Prefix = "currentApplicant")]ApplyViewModel applicantVM)
         {
 
-            //need to do some validation on the file (type etc.) then save it somewhere
+
 
             //Explore AutoMapper for doing the below
             var applicant = new Applicant()
@@ -46,8 +48,18 @@ namespace Recruit_o_matic.Controllers
                 TelephoneNumber = applicantVM.TelephoneNumber,
                 ApplicationDate = DateTime.Now
             };
-                        
+
             RavenSession.Store(applicant);
+
+            if (applicantVM.File != null)
+            {
+                //need to do some validation on the file (type etc.) then save it somewhere
+                Stream data = applicantVM.File.InputStream;
+                applicant.AttachementId = applicant.Id + "/CV";
+                MvcApplication.Store.DatabaseCommands.PutAttachment(applicant.AttachementId, null, data, new RavenJObject { {"Details","CV for vacancy " + VacancyId},
+                                                                                                                        {"ContentType",applicantVM.File.ContentType}
+                                                                                                                      });
+            }
 
             return RedirectToAction("Index");
         }
