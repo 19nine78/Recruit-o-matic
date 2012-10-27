@@ -15,7 +15,7 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Index()
         {
-            var positions = RavenSession.Query<Vacancy>().Where(x => x.Published && x.ClosingDate<= DateTime.Now).ToList();
+            var positions = RavenSession.Query<Vacancy>().VacanciesVisibleToThePublic().ToList();
             var viewModel = new HomeViewModel()
             {
                 currentPositions = positions

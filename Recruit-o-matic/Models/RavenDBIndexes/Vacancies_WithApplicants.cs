@@ -12,7 +12,7 @@ namespace Recruit_o_matic.Models.RavenDBIndexes
         public class VacancyApplicantCountResult
         {
             public int Count { get; set; }
-            public string VacancyId { get; set; }
+            public string VacancyId { get; set; }   
         }
 
         public Vacancies_WithApplicantCount()
@@ -30,5 +30,5 @@ namespace Recruit_o_matic.Models.RavenDBIndexes
                                     };
 
         }
-    }
+    }    
 }
