@@ -42,13 +42,13 @@
         </table>
     </div>
 
-    <div class="span4">
+    <div class="span4 well">
         <h3>@Model.Vacancy.Title</h3>
         <p>
             Published: @Model.Vacancy.PublishedOn<br />
             Closing Date: @Model.Vacancy.ClosingDate.ToShortDateString()
         </p>
         <h4>Details</h4>
-        <p>@Model.Vacancy.Description</p>
+        @Html.Markdown(@Model.Vacancy.Description)
     </div>
 </div>
