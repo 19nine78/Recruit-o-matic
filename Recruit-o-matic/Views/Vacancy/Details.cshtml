@@ -18,10 +18,11 @@
         </p>
         <h2>
             @Html.DisplayNameFor(model => model.currentVacancy.Description)
+            
         </h2>
-        <p>
-            @Html.Raw(Model.currentVacancy.Description.Replace("\n\r", "</p><p>"))
-        </p>
+        @Html.Markdown(Model.currentVacancy.Description)
+            
+        
 
     </div>
     <div class="span6">
