@@ -21,6 +21,14 @@
         </div>
 
         <div class="control-group">
+            @Html.LabelFor(model => model.ClosingDate, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.ClosingDate)
+                <span class="text-error">@Html.ValidationMessageFor(model => model.ClosingDate)</span>
+            </div>
+        </div>
+
+        <div class="control-group">
             @Html.LabelFor(model => model.Description, new { @class = "control-label" })
             <div class="controls">
                 @*@Html.EditorFor(model => model.Description)*@
@@ -28,19 +36,22 @@
                 <div class="mdd_toolbar"></div>
                 <textarea cols="50" rows="10" class="mdd_editor" name="Description"></textarea>
                 <div class="mdd_resizer"></div>
-                <div class="mdd_preview"></div>
 
                 <span class="text-error">@Html.ValidationMessageFor(model => model.Description)</span>
             </div>
         </div>
 
         <div class="control-group">
-            @Html.LabelFor(model => model.ClosingDate, new { @class = "control-label" })
             <div class="controls">
-                @Html.EditorFor(model => model.ClosingDate)
-                <span class="text-error">@Html.ValidationMessageFor(model => model.ClosingDate)</span>
+                <button type="button" class="btn btn-info btn-mini" data-toggle="collapse" data-target="#demo">
+                    Preview
+                </button>
+                <div id="demo" class="collapse">
+                    <div class="mdd_preview well"></div>
+                </div>
             </div>
         </div>
+
         <div class="form-actions">
             <a class="btn" href="@Url.Action("Index")"><i class="icon-arrow-left"></i>Back to List</a>
             <input class="btn btn-success" type="submit" value="Create Vacancy" />
