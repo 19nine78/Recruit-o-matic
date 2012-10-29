@@ -35,8 +35,6 @@ namespace Recruit_o_matic.Controllers
         public ActionResult Apply(string VacancyId, [Bind(Prefix = "currentApplicant")]ApplyViewModel applicantVM)
         {
 
-
-
             //Explore AutoMapper for doing the below
             var applicant = new Applicant()
             {
