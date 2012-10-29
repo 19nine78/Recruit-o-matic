@@ -27,40 +27,55 @@ namespace Recruit_o_matic.Controllers
             {
                 currentVacancy = vacancy,
                 currentApplicant = new ApplyViewModel()
+                {
+                    VacancyId = id
+                }
             };
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Apply(string VacancyId, [Bind(Prefix = "currentApplicant")]ApplyViewModel applicantVM)
+        public ActionResult Details([Bind(Prefix = "currentApplicant")]ApplyViewModel applicantVM)
         {
-
-            //Explore AutoMapper for doing the below
-            var applicant = new Applicant()
+            if (ModelState.IsValid)
             {
-                VacancyId = VacancyId,
-                FullName = applicantVM.FullName,
-                Address = applicantVM.Address,
-                EmailAddress = applicantVM.EmailAddress,
-                CoverNote = applicantVM.CoverNote,
-                TelephoneNumber = applicantVM.TelephoneNumber,
-                ApplicationDate = DateTime.Now
-            };
+                //Explore AutoMapper for doing the below
+                var applicant = new Applicant()
+                {
+                    VacancyId = applicantVM.VacancyId,
+                    FullName = applicantVM.FullName,
+                    Address = applicantVM.Address,
+                    EmailAddress = applicantVM.EmailAddress,
+                    CoverNote = applicantVM.CoverNote,
+                    TelephoneNumber = applicantVM.TelephoneNumber,
+                    ApplicationDate = DateTime.Now
+                };
 
-            RavenSession.Store(applicant);
+                RavenSession.Store(applicant);
 
-            if (applicantVM.File != null)
-            {
-                //need to do some validation on the file (type etc.) then save it somewhere
-                Stream data = applicantVM.File.InputStream;
-                applicant.AttachementId = applicant.Id + "/CV";
-                MvcApplication.Store.DatabaseCommands.PutAttachment(applicant.AttachementId, null, data, new RavenJObject { {"Details","CV for vacancy " + VacancyId},
+                if (applicantVM.File != null)
+                {
+                    //need to do some validation on the file (type etc.) then save it somewhere
+                    Stream data = applicantVM.File.InputStream;
+                    applicant.AttachementId = applicant.Id + "/CV";
+                    MvcApplication.Store.DatabaseCommands.PutAttachment(applicant.AttachementId, null, data, new RavenJObject { {"Details","CV for vacancy " + applicant.VacancyId},
                                                                                                                         {"ContentType",applicantVM.File.ContentType}
                                                                                                                       });
+                }
+                    return RedirectToAction("/ThankYou");
+
+            }
+            else
+            {
+                return RedirectToAction("");
             }
 
-            return RedirectToAction("Index");
+            
         }
 
+        public ActionResult ThankYou()
+        {
+            return View();
+        }
     }
 }

@@ -26,7 +26,7 @@
 
     </div>
     <div class="span6">
-        @using (Html.BeginForm("Apply", "Vacancy", new { VacancyId = Model.currentVacancy.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+        @using (Html.BeginForm("Details", "Vacancy", new { Id = Model.currentVacancy.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
         {
 
             <div class="text-error">
@@ -83,6 +83,9 @@
                         <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.File)</span>
                     </div>
                 </div>
+
+                @Html.HiddenFor(model => Model.currentApplicant.VacancyId)
+)
 
                 <div class="form-actions">
                      <a class="btn" href="@Url.Action("Index","Home")"><i class="icon-arrow-left"></i> Not For Me</a>
