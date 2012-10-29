@@ -31,12 +31,9 @@
         <div class="control-group">
             @Html.LabelFor(model => model.Description, new { @class = "control-label" })
             <div class="controls">
-                @*@Html.EditorFor(model => model.Description)*@
-
                 <div class="mdd_toolbar"></div>
                 <textarea cols="50" rows="10" class="mdd_editor" name="Description"></textarea>
                 <div class="mdd_resizer"></div>
-
                 <span class="text-error">@Html.ValidationMessageFor(model => model.Description)</span>
             </div>
         </div>
