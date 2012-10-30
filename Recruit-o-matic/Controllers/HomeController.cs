@@ -15,11 +15,15 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Index()
         {
-            var positions = RavenSession.Query<Vacancy>().VacanciesVisibleToThePublic().ToList();
+            var positions = RavenSession.Query<Vacancy>()
+                                        .VacanciesVisibleToThePublic()
+                                        .ToList();
+
             var viewModel = new HomeViewModel()
             {
                 currentPositions = positions
             };
+
             return View(viewModel);
         }
 

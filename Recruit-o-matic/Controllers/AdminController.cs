@@ -20,7 +20,7 @@ namespace Recruit_o_matic.Controllers
         // GET: /Admin/
 
         //TODO: A bit fragile, will break down if more than 128 vacancies (Raven soft limit)
-        // vacancies needs to be pages & counts tied to it. 
+        // vacancies needs to be paged & counts tied to it. 
         public ActionResult Index()
         {
             var vacancies = RavenSession.Query<Vacancy>()
@@ -28,8 +28,8 @@ namespace Recruit_o_matic.Controllers
                                         .ToList();
 
             var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
-                                                     .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
-                                                     .ToList();
+                                              .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
+                                              .ToList();
 
             var viewModel = new HomeViewModel()
             {
