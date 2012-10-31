@@ -14,6 +14,7 @@ using Raven.Abstractions.Data;
 
 namespace Recruit_o_matic.Controllers
 {
+    [Authorize]
     public class AdminController : BaseRavenController
     {
         //

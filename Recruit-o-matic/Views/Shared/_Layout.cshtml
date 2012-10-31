@@ -41,8 +41,21 @@
                                 <li><a href="@Url.Action("Create", "Admin")">Create new Position</a></li>                                
                             </ul>
                         </li>
-                    </ul>
-                    
+                         
+                    </ul>  @if (Request.IsAuthenticated) {
+                        
+                           
+          
+        using (Html.BeginForm("LogOff", "Account", new { id = "logoutForm" }, FormMethod.Post, new { @class = "navbar-form pull-right" }))
+        {
+            @Html.AntiForgeryToken()
+            <a class="btn btn-mini" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+    
+        }
+
+
+
+                           }                   
                 </div>
                 <!--/.nav-collapse -->
             </div>

@@ -3,7 +3,9 @@
 
 <div class="well well-large">
         <h1>Recruit-O-Matic Portal</h1>
-               <p>Welcome [[username]]. There are currently <strong>@Model.Vacancies.Where(x => x.Published).Count()</strong> published vacancies with a total of <strong>@Model.Counts.Sum(x => x.Count)</strong> applicants.</p>
+    
+
+               <p>Welcome <strong>@User.Identity.Name</strong>. There are currently <strong>@Model.Vacancies.Where(x => x.Published).Count()</strong> published vacancies with a total of <strong>@Model.Counts.Sum(x => x.Count)</strong> applicants.</p>
 <p>
             <a href="@Url.Action("Create")" class="btn btn-success"><i class="icon-user icon-white"></i>Create New Vacancy</a>
         </p>
