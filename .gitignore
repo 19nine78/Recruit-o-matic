@@ -4,6 +4,8 @@ obj
 packages
 *.suo
 *.user
+*.ldf
+*.mdf
 
 # mstest test results
 TestResults
