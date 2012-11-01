@@ -1,34 +1,45 @@
 ﻿@model Recruit_o_matic.Models.RegisterModel
-@{
-    ViewBag.Title = "Register";
-}
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-    <h2>Create a new account.</h2>
-</hgroup>
+<h2>Create a new account.</h2>
 
-@using (Html.BeginForm()) {
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class="form-horizontal" }))
+{
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
+    <div class="text-error">
+        @Html.ValidationSummary()
+    </div>
 
     <fieldset>
         <legend>Registration Form</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.UserName)
+        <div class="control-group">
+            @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
+            <div class="controls">
                 @Html.TextBoxFor(m => m.UserName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Password)
+
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+            <div class="controls">
                 @Html.PasswordFor(m => m.Password)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.ConfirmPassword)
+
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+            <div class="controls">
                 @Html.PasswordFor(m => m.ConfirmPassword)
-            </li>
-        </ol>
-        <input type="submit" value="Register" />
+
+            </div>
+        </div>
+
+        <div class="form-actions">
+         <input class="btn btn-success" type="submit" value="Register" />
+
+        </div>
     </fieldset>
 }
 

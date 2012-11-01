@@ -24,21 +24,65 @@ namespace Recruit_o_matic.Controllers
         // vacancies needs to be paged & counts tied to it. 
         public ActionResult Index()
         {
+            RavenQueryStatistics stats;
+
             var vacancies = RavenSession.Query<Vacancy>()
+                                        .Statistics(out stats)
+                                        .Customize(x => x.WaitForNonStaleResults())
                                         .OrderBy(x => x.CreatedOn)
+                                        .Take(3)
                                         .ToList();
 
             var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
+                                              .Where(x => x.VacancyId.In<string>(vacancies.Select(y => y.Id)))
+                                              .Customize(x => x.WaitForNonStaleResults())
                                               .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
                                               .ToList();
 
+
+            var vmGrid = new VacancyGridViewModel();
+
+            foreach (var vacancy in vacancies)
+            {
+                vmGrid.Vacancies.Add(new VacancyGridRow()
+                {
+                    Id = vacancy.Id,
+                    Title = vacancy.Title,
+                    PublishedOn = vacancy.PublishedOn,
+                    ClosingDate = vacancy.ClosingDate,
+                    Published = vacancy.Published,
+                    ApplicantCount = applicantCounts.Where(x => x.VacancyId == vacancy.Id)
+                                                    .Select(x => x.Count)
+                                                    .FirstOrDefault()
+
+                });
+            }
+
+
+
             var viewModel = new HomeViewModel()
             {
-                Vacancies = vacancies,
+                Vacancies = vmGrid,
                 Counts = applicantCounts
             };
 
             return View(viewModel);
+        }
+
+
+        public ActionResult VacancyPaging(int start)
+        {
+            RavenQueryStatistics stats;
+
+            var vacancies = RavenSession.Query<Vacancy>()
+                                        .Statistics(out stats)
+                                        .Customize(x => x.WaitForNonStaleResults())
+                                        .OrderBy(x => x.CreatedOn)
+                                        .Skip(start)
+                                        .Take(3)
+                                        .ToList();
+
+            return PartialView(vacancies);
         }
 
         //
@@ -187,7 +231,7 @@ namespace Recruit_o_matic.Controllers
             }
 
             return File(ReadFully(attachement.Data()), attachement.Metadata["ContentType"].ToString(), id.Replace("/", "-"));
-            
+
         }
 
         private static byte[] ReadFully(Stream input)
