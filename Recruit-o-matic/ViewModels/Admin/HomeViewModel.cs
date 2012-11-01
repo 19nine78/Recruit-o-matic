@@ -9,7 +9,7 @@ namespace Recruit_o_matic.ViewModels.Admin
 {
     public class HomeViewModel
     {
-        public IList<Vacancy> Vacancies { get; set; }
+        public VacancyGridViewModel Vacancies { get; set; }
         public IList<Vacancies_WithApplicantCount.VacancyApplicantCountResult> Counts { get; set; }
     }    
 }
