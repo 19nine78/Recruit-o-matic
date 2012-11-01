@@ -11,6 +11,7 @@ using Recruit_o_matic.Models.RavenDBIndexes;
 using Raven.Json.Linq;
 using System.IO;
 using Raven.Abstractions.Data;
+using AutoMapper;
 
 namespace Recruit_o_matic.Controllers
 {
@@ -42,22 +43,14 @@ namespace Recruit_o_matic.Controllers
 
             var vmGrid = new VacancyGridViewModel();
 
-            foreach (var vacancy in vacancies)
-            {
-                vmGrid.Vacancies.Add(new VacancyGridRow()
-                {
-                    Id = vacancy.Id,
-                    Title = vacancy.Title,
-                    PublishedOn = vacancy.PublishedOn,
-                    ClosingDate = vacancy.ClosingDate,
-                    Published = vacancy.Published,
-                    ApplicantCount = applicantCounts.Where(x => x.VacancyId == vacancy.Id)
-                                                    .Select(x => x.Count)
-                                                    .FirstOrDefault()
+            
+ 
+            vmGrid.Vacancies = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies);
 
-                });
-            }
-
+            vmGrid.Vacancies.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
+                                                                                     .Select(y => y.Count)
+                                                                                     .FirstOrDefault()
+                                                                                     );
 
 
             var viewModel = new HomeViewModel()

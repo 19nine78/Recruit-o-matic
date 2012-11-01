@@ -1,5 +1,6 @@
 ﻿using Raven.Client.Document;
 using Raven.Client.Indexes;
+using Recruit_o_matic.Infrastructure;
 using Recruit_o_matic.Models.RavenDBIndexes;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,8 @@ namespace Recruit_o_matic
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            AutoMapperBootStrapper.Bootstrap();
 
             Store = new DocumentStore { ConnectionStringName = "RavenDB" };
             //Store.Conventions.ShouldCacheRequest = (url) => false;
