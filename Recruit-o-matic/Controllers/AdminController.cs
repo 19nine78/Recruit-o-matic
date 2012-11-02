@@ -43,15 +43,15 @@ namespace Recruit_o_matic.Controllers
 
             var vmGrid = new VacancyGridViewModel();
 
-            
- 
+
+
             vmGrid.Vacancies = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies);
 
+            //TODO: can automapper do this?
             vmGrid.Vacancies.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
                                                                                      .Select(y => y.Count)
                                                                                      .FirstOrDefault()
                                                                                      );
-
 
             var viewModel = new HomeViewModel()
             {
@@ -75,7 +75,25 @@ namespace Recruit_o_matic.Controllers
                                         .Take(3)
                                         .ToList();
 
-            return PartialView(vacancies);
+            var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
+                                              .Where(x => x.VacancyId.In<string>(vacancies.Select(y => y.Id)))
+                                              .Customize(x => x.WaitForNonStaleResults())
+                                              .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
+                                              .ToList();
+
+            var viewModel = new VacancyGridViewModel()
+            {
+                Vacancies = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies)
+            };
+
+            //TODO: can automapper do this?
+            viewModel.Vacancies.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
+                                                                                        .Select(y => y.Count)
+                                                                                     .FirstOrDefault()
+                                                                                     );
+
+
+            return PartialView("_vacancyGrid", viewModel);
         }
 
         //
