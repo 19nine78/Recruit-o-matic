@@ -47,7 +47,7 @@
                         
                            
           
-        using (Html.BeginForm("LogOff", "Account", new { id = "logoutForm" }, FormMethod.Post, new { @class = "navbar-form pull-right" }))
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "navbar-form pull-right", id="logoutForm" }))
         {
             @Html.AntiForgeryToken()
             <a class="btn btn-mini" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
