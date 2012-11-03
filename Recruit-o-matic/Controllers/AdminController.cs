@@ -25,39 +25,12 @@ namespace Recruit_o_matic.Controllers
         // vacancies needs to be paged & counts tied to it. 
         public ActionResult Index()
         {
-            RavenQueryStatistics stats;
 
-            var vacancies = RavenSession.Query<Vacancy>()
-                                        .Statistics(out stats)
-                                        .Customize(x => x.WaitForNonStaleResults())
-                                        .OrderBy(x => x.CreatedOn)
-                                        .Take(3)
-                                        .ToList();
+            var viewModel = new AdminHomeViewModel();
 
-            var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
-                                              .Where(x => x.VacancyId.In<string>(vacancies.Select(y => y.Id)))
-                                              .Customize(x => x.WaitForNonStaleResults())
-                                              .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
-                                              .ToList();
-
-
-            var vmGrid = new VacancyGridViewModel();
-
-
-
-            vmGrid.Vacancies = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies);
-
-            //TODO: can automapper do this?
-            vmGrid.Vacancies.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
-                                                                                     .Select(y => y.Count)
-                                                                                     .FirstOrDefault()
-                                                                                     );
-
-            var viewModel = new HomeViewModel()
-            {
-                Vacancies = vmGrid,
-                Counts = applicantCounts
-            };
+            viewModel.Vacancies = BuildVacancyGridViewModel(0);
+            viewModel.TotalApplicants = RavenSession.Query<Applicant>().Count();
+            viewModel.TotalPublishedVacancies = viewModel.Vacancies.Vacancies.Where(x => x.Published).Count();
 
             return View(viewModel);
         }
@@ -65,35 +38,7 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult VacancyPaging(int start)
         {
-            RavenQueryStatistics stats;
-
-            var vacancies = RavenSession.Query<Vacancy>()
-                                        .Statistics(out stats)
-                                        .Customize(x => x.WaitForNonStaleResults())
-                                        .OrderBy(x => x.CreatedOn)
-                                        .Skip(start)
-                                        .Take(3)
-                                        .ToList();
-
-            var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
-                                              .Where(x => x.VacancyId.In<string>(vacancies.Select(y => y.Id)))
-                                              .Customize(x => x.WaitForNonStaleResults())
-                                              .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
-                                              .ToList();
-
-            var viewModel = new VacancyGridViewModel()
-            {
-                Vacancies = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies)
-            };
-
-            //TODO: can automapper do this?
-            viewModel.Vacancies.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
-                                                                                        .Select(y => y.Count)
-                                                                                     .FirstOrDefault()
-                                                                                     );
-
-
-            return PartialView("_vacancyGrid", viewModel);
+            return PartialView("_vacancyGrid", BuildVacancyGridViewModel(start));
         }
 
         //
@@ -257,6 +202,37 @@ namespace Recruit_o_matic.Controllers
                 }
                 return ms.ToArray();
             }
+        }
+
+        private VacancyGridViewModel BuildVacancyGridViewModel(int start)
+        {
+            RavenQueryStatistics stats;
+
+            var vacancies = RavenSession.Query<Vacancy>()
+                                        .Statistics(out stats)
+                                        .Customize(x => x.WaitForNonStaleResults())
+                                        .OrderBy(x => x.CreatedOn)
+                                        .Skip(start)
+                                        .Take(3)
+                                        .ToList();
+
+            var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
+                                              .Where(x => x.VacancyId.In<string>(vacancies.Select(y => y.Id)))
+                                              .Customize(x => x.WaitForNonStaleResults())
+                                              .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
+                                              .ToList();
+
+            var viewModel = new VacancyGridViewModel()
+            {
+                Vacancies = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies),
+                TotalRecords = stats.TotalResults
+            };
+
+            //TODO: can automapper do this?
+            viewModel.Vacancies.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
+                                                                                        .Select(y => y.Count)
+                                                                                        .FirstOrDefault());
+            return viewModel;
         }
     }
 }

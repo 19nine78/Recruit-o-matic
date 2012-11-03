@@ -13,6 +13,7 @@ namespace Recruit_o_matic.ViewModels.Admin
         }
 
         public IList<VacancyGridRow> Vacancies { get; set; }
+        public int TotalRecords { get; set; }
 
     }
 

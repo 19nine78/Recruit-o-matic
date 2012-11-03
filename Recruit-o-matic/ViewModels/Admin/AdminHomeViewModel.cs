@@ -7,9 +7,10 @@ using System.Web;
 
 namespace Recruit_o_matic.ViewModels.Admin
 {
-    public class HomeViewModel
+    public class AdminHomeViewModel
     {
         public VacancyGridViewModel Vacancies { get; set; }
-        public IList<Vacancies_WithApplicantCount.VacancyApplicantCountResult> Counts { get; set; }
+        public int TotalPublishedVacancies { get; set; }
+        public int TotalApplicants { get; set; }
     }    
 }
