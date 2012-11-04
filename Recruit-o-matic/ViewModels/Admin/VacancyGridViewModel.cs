@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Recruit_o_matic.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,12 +8,12 @@ namespace Recruit_o_matic.ViewModels.Admin
 {
     public class VacancyGridViewModel
     {
-        public VacancyGridViewModel()
-        {
-            Vacancies = new List<VacancyGridRow>();
-        }
+        //public VacancyGridViewModel()
+        //{
+        //    Vacancies = new List<VacancyGridRow>();
+        //}
 
-        public IList<VacancyGridRow> Vacancies { get; set; }
+        public PagedList<VacancyGridRow> Vacancies { get; set; }
         public int TotalRecords { get; set; }
 
     }
@@ -25,6 +26,8 @@ namespace Recruit_o_matic.ViewModels.Admin
         public DateTime ClosingDate { get; set; }
         public bool Published { get; set; }
         public int ApplicantCount { get; set; }
+        public bool IsClosingSoon { get; set; }
+        public bool IsClosed { get; set; }
     }
 
 }
