@@ -12,6 +12,7 @@ using Raven.Json.Linq;
 using System.IO;
 using Raven.Abstractions.Data;
 using AutoMapper;
+using Recruit_o_matic.Infrastructure;
 
 namespace Recruit_o_matic.Controllers
 {
@@ -21,24 +22,24 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/
 
-        //TODO: A bit fragile, will break down if more than 128 vacancies (Raven soft limit)
-        // vacancies needs to be paged & counts tied to it. 
         public ActionResult Index()
         {
 
             var viewModel = new AdminHomeViewModel();
 
-            viewModel.Vacancies = BuildVacancyGridViewModel(0);
+            viewModel.Vacancies = BuildVacancyGridViewModel(1);
             viewModel.TotalApplicants = RavenSession.Query<Applicant>().Count();
             viewModel.TotalPublishedVacancies = viewModel.Vacancies.Vacancies.Where(x => x.Published).Count();
+
+
 
             return View(viewModel);
         }
 
 
-        public ActionResult VacancyPaging(int start)
+        public ActionResult VacancyPaging(int page)
         {
-            return PartialView("_vacancyGrid", BuildVacancyGridViewModel(start));
+            return PartialView("_vacancyGrid", BuildVacancyGridViewModel(page));
         }
 
         //
@@ -204,7 +205,7 @@ namespace Recruit_o_matic.Controllers
             }
         }
 
-        private VacancyGridViewModel BuildVacancyGridViewModel(int start)
+        private VacancyGridViewModel BuildVacancyGridViewModel(int page)
         {
             RavenQueryStatistics stats;
 
@@ -212,7 +213,7 @@ namespace Recruit_o_matic.Controllers
                                         .Statistics(out stats)
                                         .Customize(x => x.WaitForNonStaleResults())
                                         .OrderBy(x => x.CreatedOn)
-                                        .Skip(start)
+                                        .Skip((page - 1) * 3)
                                         .Take(3)
                                         .ToList();
 
@@ -222,16 +223,20 @@ namespace Recruit_o_matic.Controllers
                                               .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
                                               .ToList();
 
+            var tmp = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies);
+            //TODO: can automapper do this?
+            tmp.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
+                                                                                        .Select(y => y.Count)
+                                                                                        .FirstOrDefault());
+
             var viewModel = new VacancyGridViewModel()
             {
-                Vacancies = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies),
+                //Vacancies = ,
                 TotalRecords = stats.TotalResults
             };
 
-            //TODO: can automapper do this?
-            viewModel.Vacancies.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
-                                                                                        .Select(y => y.Count)
-                                                                                        .FirstOrDefault());
+            viewModel.Vacancies = new PagedList<VacancyGridRow>(tmp, (page - 1), 3, stats.TotalResults);
+
             return viewModel;
         }
     }

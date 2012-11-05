@@ -15,28 +15,9 @@
     <div class="span12">
 
 
-        <table class="table">
-            <caption>Current Published Vacancies</caption>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Published</th>
-                    <th>Closing Date</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+        
                 @{Html.RenderPartial("_vacancyGrid", Model.Vacancies);}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="6">[paging]</td>
-
-                </tr>
-            </tfoot>
-
-        </table>
+            
 
     </div>
 
