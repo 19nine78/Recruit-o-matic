@@ -35,17 +35,35 @@
                 </td>
                 <td>
                     <div class="btn-group">
+                        @if (item.IsClosed)
+                        {
+                            <span class="btn btn-mini btn-info disabled"><i class="icon-edit icon-white"></i>&nbsp;Edit</span>
+                        <a class="btn btn-mini btn-danger" href="@Url.Action("Delete", new { id = item.Id })"><i class="icon-trash icon-white"></i>&nbsp;Delete</a>
+                        <a class="btn btn-mini btn-success" href="@Url.Action("Details", new { id = item.Id })"><i class="icon-info-sign icon-white"></i>&nbsp;Details</a>
+
+                        if (item.Published)
+                        {
+                            <span class="btn btn-mini btn-inverse disabled"><i class="icon-pause icon-white"></i>&nbsp;Suspend</span>                             
+                        }
+                        else
+                        {
+                            <span class="btn btn-mini disabled"><i class="icon-play"></i>&nbsp;Publish</span>                            
+                        }
+                        }else {
+
                         <a class="btn btn-mini btn-info" href="@Url.Action("Edit", new { id = item.Id })"><i class="icon-edit icon-white"></i>&nbsp;Edit</a>
                         <a class="btn btn-mini btn-danger" href="@Url.Action("Delete", new { id = item.Id })"><i class="icon-trash icon-white"></i>&nbsp;Delete</a>
                         <a class="btn btn-mini btn-success" href="@Url.Action("Details", new { id = item.Id })"><i class="icon-info-sign icon-white"></i>&nbsp;Details</a>
 
-                        @if (item.Published)
+                        if (item.Published)
                         {
                             <a class="btn btn-mini btn-inverse" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-pause icon-white"></i>&nbsp;Suspend</a>                             
                         }
                         else
                         {
                             <a class="btn btn-mini" href="@Url.Action("Publish", new { id = item.Id })"><i class="icon-play"></i>&nbsp;Publish</a>                            
+                        }
+                            
                         }
                     </div>
                 </td>

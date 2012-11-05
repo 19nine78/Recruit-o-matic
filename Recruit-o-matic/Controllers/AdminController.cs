@@ -22,28 +22,22 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/
 
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
 
             var viewModel = new AdminHomeViewModel();
 
-            viewModel.Vacancies = BuildVacancyGridViewModel(1);
+            viewModel.Vacancies = BuildVacancyGridViewModel(page);
             viewModel.TotalApplicants = RavenSession.Query<Applicant>().Count();
             viewModel.TotalPublishedVacancies = viewModel.Vacancies.Vacancies.Where(x => x.Published).Count();
 
-
-
             return View(viewModel);
         }
-
 
         public ActionResult VacancyPaging(int page)
         {
             return PartialView("_vacancyGrid", BuildVacancyGridViewModel(page));
         }
-
-        //
-        // GET: /Admin/Details/5
 
         public ActionResult Details(string id)
         {
@@ -64,16 +58,10 @@ namespace Recruit_o_matic.Controllers
             return View(viewModel);
         }
 
-        //
-        // GET: /Admin/Create
-
         public ActionResult Create()
         {
             return View();
         }
-
-        //
-        // POST: /Admin/Create
 
         [HttpPost]
         public ActionResult Create(Vacancy vacancy)
@@ -100,18 +88,12 @@ namespace Recruit_o_matic.Controllers
             }
         }
 
-        //
-        // GET: /Admin/Edit/5
-
         public ActionResult Edit(string id)
         {
             var vacancy = RavenSession.Load<Vacancy>(id);
 
             return View(vacancy);
         }
-
-        //
-        // POST: /Admin/Edit/5
 
         [HttpPost]
         public ActionResult Edit(Vacancy vacancy)
@@ -134,17 +116,11 @@ namespace Recruit_o_matic.Controllers
             }
         }
 
-        //
-        // GET: /Admin/Delete/5
-
         public ActionResult Delete(string id)
         {
             var vacancy = RavenSession.Load<Vacancy>(id);
             return View(vacancy);
         }
-
-        //
-        // POST: /Admin/Delete/5
 
         [HttpPost]
         public ActionResult DeleteConfirm(string id)
@@ -161,6 +137,7 @@ namespace Recruit_o_matic.Controllers
                 return View();
             }
         }
+        
         public ActionResult Publish(string id)
         {
             var vacancy = RavenSession.Load<Vacancy>(id);
@@ -229,12 +206,8 @@ namespace Recruit_o_matic.Controllers
                                                                                         .Select(y => y.Count)
                                                                                         .FirstOrDefault());
 
-            var viewModel = new VacancyGridViewModel()
-            {
-                //Vacancies = ,
-                TotalRecords = stats.TotalResults
-            };
-
+            var viewModel = new VacancyGridViewModel();
+            viewModel.TotalRecords = stats.TotalResults;
             viewModel.Vacancies = new PagedList<VacancyGridRow>(tmp, (page - 1), 3, stats.TotalResults);
 
             return viewModel;
