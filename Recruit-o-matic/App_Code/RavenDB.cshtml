@@ -1,0 +1,17 @@
+﻿@helper If(bool condition, string then) {
+    if(condition) { <text>@then</text> }
+}
+
+@helper Pager(int currentPage, int totalPages, Func<int, string> pageUrl, string cssClass = null) {
+    if (totalPages > 1) { 
+    <div class="pagination @cssClass">
+        <ul>
+            @for (int i = 1; i < totalPages + 1; i++) { 
+                <li @If(i == (currentPage + 1), then: "class=active")>
+                    <a href="@pageUrl(i)">@i</a>
+                </li>
+            }
+        </ul>
+    </div>
+    }
+}
