@@ -78,7 +78,8 @@
                 @RavenDB.Pager(
     Model.Vacancies.PageIndex, 
     Model.Vacancies.TotalPages, 
-    x => Url.Action("index", new { page = x })
+    Model.Vacancies.PageSize,
+    x => Url.Action("index", new { page = x, pageSize= Model.Vacancies.PageSize })
 )
             </td>
 

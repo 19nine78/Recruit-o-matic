@@ -13,8 +13,8 @@
 
 <div class="row-fluid">
     <div class="span12">
-        
-                @{Html.RenderPartial("_vacancyGrid", Model.Vacancies);}           
+
+        <div id="vacancyTable">@{Html.RenderPartial("_vacancyGrid", Model.Vacancies);}</div>
 
     </div>
 
@@ -22,6 +22,47 @@
 
 @section scripts{
 
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            hookUpPager();
+        });
+
+
+        function hookUpPager() {
+            $(".pagination a").click(function (e) {
+                pager($(this).attr('data-page'), $(this).attr('data-page-size'));
+
+                e.preventDefault();
+            });
+        }
+
+
+        function pager(page, pageSize)
+        {
+            var params = {
+                Page : page,
+                PageSize : pageSize
+            };
+
+            $.ajax(
+                {
+                    url: "/Admin/VacancyPaging", data: params,
+                    success: function (html) {
+                        $("#vacancyTable").fadeOut('fast', function () {
+                            $("#vacancyTable").html(html).fadeIn('fast');
+                            hookUpPager();
+                        });
+                        
+                    },
+                    error: function(){
+
+                    }
+                }
+            );
+        }
+
+    </script>
 
 }
 

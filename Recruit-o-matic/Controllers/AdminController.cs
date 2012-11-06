@@ -22,21 +22,21 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/
 
-        public ActionResult Index(int page = 1)
+        public ActionResult Index(int page = 1, int pageSize = 3)
         {
 
             var viewModel = new AdminHomeViewModel();
 
-            viewModel.Vacancies = BuildVacancyGridViewModel(page);
+            viewModel.Vacancies = BuildVacancyGridViewModel(page, pageSize);
             viewModel.TotalApplicants = RavenSession.Query<Applicant>().Count();
             viewModel.TotalPublishedVacancies = viewModel.Vacancies.Vacancies.Where(x => x.Published).Count();
 
             return View(viewModel);
         }
 
-        public ActionResult VacancyPaging(int page)
+        public ActionResult VacancyPaging(int page, int pageSize)
         {
-            return PartialView("_vacancyGrid", BuildVacancyGridViewModel(page));
+            return PartialView("_vacancyGrid", BuildVacancyGridViewModel(page, pageSize));
         }
 
         public ActionResult Details(string id)
@@ -182,7 +182,7 @@ namespace Recruit_o_matic.Controllers
             }
         }
 
-        private VacancyGridViewModel BuildVacancyGridViewModel(int page)
+        private VacancyGridViewModel BuildVacancyGridViewModel(int page, int pageSize)
         {
             RavenQueryStatistics stats;
 
@@ -190,7 +190,7 @@ namespace Recruit_o_matic.Controllers
                                         .Statistics(out stats)
                                         .Customize(x => x.WaitForNonStaleResults())
                                         .OrderBy(x => x.CreatedOn)
-                                        .Skip((page - 1) * 3)
+                                        .Skip((page - 1) * pageSize)
                                         .Take(3)
                                         .ToList();
 
@@ -208,7 +208,7 @@ namespace Recruit_o_matic.Controllers
 
             var viewModel = new VacancyGridViewModel();
             viewModel.TotalRecords = stats.TotalResults;
-            viewModel.Vacancies = new PagedList<VacancyGridRow>(tmp, (page - 1), 3, stats.TotalResults);
+            viewModel.Vacancies = new PagedList<VacancyGridRow>(tmp, (page - 1), pageSize, stats.TotalResults);
 
             return viewModel;
         }
