@@ -18,17 +18,16 @@
         </p>
         <h2>
             @Html.DisplayNameFor(model => model.currentVacancy.Description)
-            
+
         </h2>
         @Html.Markdown(Model.currentVacancy.Description)
-            
-        
+
+
 
     </div>
     <div class="span6">
         @using (Html.BeginForm("Details", "Vacancy", new { Id = Model.currentVacancy.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
         {
-
             <div class="text-error">
                 @Html.ValidationSummary(true)
             </div>
@@ -71,8 +70,21 @@
                 <div class="control-group">
                     @Html.LabelFor(model => model.currentApplicant.CoverNote, new { @class = "control-label" })
                     <div class="controls">
-                        @Html.EditorFor(model => model.currentApplicant.CoverNote)
+                        <div class="mdd_toolbar"></div>
+                        <textarea cols="50" rows="10" class="mdd_editor" name="Description">@Model.currentApplicant.CoverNote</textarea>
+                        <div class="mdd_resizer"></div>
                         <span class="text-error">@Html.ValidationMessageFor(model => model.currentApplicant.CoverNote)</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="button" class="btn btn-info btn-mini" data-toggle="collapse" data-target="#demo">
+                            Preview
+                        </button>
+                        <div id="demo" class="collapse">
+                            <div class="mdd_preview well"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -85,10 +97,10 @@
                 </div>
 
                 @Html.HiddenFor(model => Model.currentApplicant.VacancyId)
-)
+
 
                 <div class="form-actions">
-                     <a class="btn" href="@Url.Action("Index","Home")"><i class="icon-arrow-left"></i> Not For Me</a>
+                    <a class="btn" href="@Url.Action("Index", "Home")"><i class="icon-arrow-left"></i>Not For Me</a>
                     <input class="btn btn-success" type="submit" value="Apply" />
                 </div>
             </fieldset>
@@ -101,4 +113,14 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+<link rel="stylesheet" href="/Scripts/mdd_styles.css" />
+    <script type="text/javascript" src="/Scripts/MarkdownDeepLib.min.js"></script>
+
+    <script type="text/javascript">
+        $("textarea.mdd_editor").MarkdownDeep({
+            help_location: "/Content/mdd_help.html",
+            disableTabHandling: true
+        });
+
+    </script>
 }
