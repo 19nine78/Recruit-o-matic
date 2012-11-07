@@ -200,15 +200,15 @@ namespace Recruit_o_matic.Controllers
                                               .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
                                               .ToList();
 
-            var tmp = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies);
+            var vacancyRows = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies);
             //TODO: can automapper do this?
-            tmp.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
+            vacancyRows.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
                                                                                         .Select(y => y.Count)
                                                                                         .FirstOrDefault());
 
             var viewModel = new VacancyGridViewModel();
             viewModel.TotalRecords = stats.TotalResults;
-            viewModel.Vacancies = new PagedList<VacancyGridRow>(tmp, (page - 1), pageSize, stats.TotalResults);
+            viewModel.Vacancies = new PagedList<VacancyGridRow>(vacancyRows, (page - 1), pageSize, stats.TotalResults);
 
             return viewModel;
         }
