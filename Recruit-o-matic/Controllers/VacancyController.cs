@@ -1,4 +1,5 @@
-﻿using Raven.Json.Linq;
+﻿using AutoMapper;
+using Raven.Json.Linq;
 using Recruit_o_matic.Models;
 using Recruit_o_matic.ViewModels;
 using System;
@@ -39,28 +40,24 @@ namespace Recruit_o_matic.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Explore AutoMapper for doing the below
-                var applicant = new Applicant()
-                {
-                    VacancyId = applicantVM.VacancyId,
-                    FullName = applicantVM.FullName,
-                    Address = applicantVM.Address,
-                    EmailAddress = applicantVM.EmailAddress,
-                    CoverNote = applicantVM.CoverNote,
-                    TelephoneNumber = applicantVM.TelephoneNumber,
-                    ApplicationDate = DateTime.Now
-                };
+
+                var applicant = Mapper.Map<ApplyViewModel, Applicant>(applicantVM);
+                applicant.ApplicationDate = DateTime.Now;
 
                 RavenSession.Store(applicant);
 
                 if (applicantVM.File != null)
                 {
-                    //need to do some validation on the file (type etc.) then save it somewhere
-                    Stream data = applicantVM.File.InputStream;
-                    applicant.AttachementId = applicant.Id + "/CV";
-                    MvcApplication.Store.DatabaseCommands.PutAttachment(applicant.AttachementId, null, data, new RavenJObject { {"Details","CV for vacancy " + applicant.VacancyId},
-                                                                                                                        {"ContentType",applicantVM.File.ContentType}
-                                                                                                                      });
+                    applicant.AttachementId = GenerateAttachementId(applicant.Id);
+                    Stream data = applicantVM.File.InputStream; 
+                   
+                    //better way to get a reference to this?
+                    MvcApplication.Store
+                                  .DatabaseCommands
+                                  .PutAttachment(applicant.AttachementId, null, data, new RavenJObject { 
+                                                                                                            {"Details","CV for vacancy " + applicant.VacancyId},
+                                                                                                            {"ContentType",applicantVM.File.ContentType}
+                                                                                                       });
                 }
                     return RedirectToAction("/ThankYou");
 
@@ -76,6 +73,12 @@ namespace Recruit_o_matic.Controllers
         public ActionResult ThankYou()
         {
             return View();
+        }
+
+        private string GenerateAttachementId(string applicantId)
+        {
+
+            return applicantId + "/cv";
         }
     }
 }
