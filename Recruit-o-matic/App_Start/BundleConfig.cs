@@ -38,6 +38,13 @@ namespace Recruit_o_matic
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            //Markdown bundles
+            bundles.Add(new ScriptBundle("~/bundles/MarkdownDeep").Include(
+                "~/Scripts/MarkdownDeepLib.js",
+                "~/Scripts/MarkDownDeepInit.js"));
+
+            bundles.Add(new StyleBundle("~/Content/css/MarkDownDeep").Include("~/Content/MarkdownDeepAssets/mdd_styles.css"));
         }
     }
 }

@@ -113,15 +113,6 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<link rel="stylesheet" href="/Scripts/mdd_styles.css" />
-    <script type="text/javascript" src="/Scripts/MarkdownDeepLib.min.js"></script>
-
-    <script type="text/javascript">
-        $("textarea.mdd_editor").MarkdownDeep({
-            help_location: "/Scripts/mdd_help.htm",
-            disableTabHandling: true,
-            
-        });
-
-    </script>
+    @Scripts.Render("~/bundles/MarkDownDeep")    
+    @Styles.Render("~/Content/css/MarkDownDeep")
 }
