@@ -16,7 +16,6 @@ using Recruit_o_matic.Infrastructure;
 
 namespace Recruit_o_matic.Controllers
 {
-    [Authorize]
     public class AdminController : BaseRavenController
     {
         //
