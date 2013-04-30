@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Raven.Client;
 using Raven.Client.Linq;
 using Recruit_o_matic.Models;
+using Recruit_o_matic.Services;
+using Recruit_o_matic.Services.Interfaces;
 using Recruit_o_matic.ViewModels.Admin;
 using Recruit_o_matic.Models.RavenDBIndexes;
 using Raven.Json.Linq;
@@ -21,21 +23,28 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/
 
+        private IVacancyService _vacancyService;
+
+        public AdminController()
+        {
+            _vacancyService = new VacancyService(MvcApplication.Store.OpenSession());
+        }
+
         public ActionResult Index(int page = 1, int pageSize = 3)
         {
 
             var viewModel = new AdminHomeViewModel();
 
-            viewModel.Vacancies = BuildVacancyGridViewModel(page, pageSize);
+            viewModel.Vacancies = _vacancyService.BuildVacancyGridViewModel(page, pageSize);
             viewModel.TotalApplicants = RavenSession.Query<Applicant>().Count();
-            viewModel.TotalPublishedVacancies = viewModel.Vacancies.Vacancies.Where(x => x.Published).Count();
+            viewModel.TotalPublishedVacancies = viewModel.Vacancies.Vacancies.Count(x => x.Published);
 
             return View(viewModel);
         }
 
         public ActionResult VacancyPaging(int page, int pageSize)
         {
-            return PartialView("_vacancyGrid", BuildVacancyGridViewModel(page, pageSize));
+            return PartialView("_vacancyGrid", _vacancyService.BuildVacancyGridViewModel(page, pageSize));
         }
 
         public ActionResult Details(string id)
@@ -141,7 +150,7 @@ namespace Recruit_o_matic.Controllers
         {
             var vacancy = RavenSession.Load<Vacancy>(id);
 
-            vacancy.Published = vacancy.Published ? false : true;
+            vacancy.Published = !vacancy.Published;
 
             if (vacancy.Published && vacancy.PublishedOn == null)
                 vacancy.PublishedOn = DateTime.Now;
@@ -179,37 +188,6 @@ namespace Recruit_o_matic.Controllers
                 }
                 return ms.ToArray();
             }
-        }
-
-        private VacancyGridViewModel BuildVacancyGridViewModel(int page, int pageSize)
-        {
-            RavenQueryStatistics stats;
-
-            var vacancies = RavenSession.Query<Vacancy>()
-                                        .Statistics(out stats)
-                                        .Customize(x => x.WaitForNonStaleResults())
-                                        .OrderBy(x => x.CreatedOn)
-                                        .Skip((page - 1) * pageSize)
-                                        .Take(3)
-                                        .ToList();
-
-            var applicantCounts = RavenSession.Query<Applicant, Vacancies_WithApplicantCount>()
-                                              .Where(x => x.VacancyId.In<string>(vacancies.Select(y => y.Id)))
-                                              .Customize(x => x.WaitForNonStaleResults())
-                                              .As<Vacancies_WithApplicantCount.VacancyApplicantCountResult>()
-                                              .ToList();
-
-            var vacancyRows = Mapper.Map<List<Vacancy>, List<VacancyGridRow>>(vacancies);
-            //TODO: can automapper do this?
-            vacancyRows.ToList().ForEach(x => x.ApplicantCount = applicantCounts.Where(y => y.VacancyId == x.Id)
-                                                                                        .Select(y => y.Count)
-                                                                                        .FirstOrDefault());
-
-            var viewModel = new VacancyGridViewModel();
-            viewModel.TotalRecords = stats.TotalResults;
-            viewModel.Vacancies = new PagedList<VacancyGridRow>(vacancyRows, (page - 1), pageSize, stats.TotalResults);
-
-            return viewModel;
         }
     }
 }

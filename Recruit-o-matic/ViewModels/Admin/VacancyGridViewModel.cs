@@ -9,9 +9,8 @@ namespace Recruit_o_matic.ViewModels.Admin
     public class VacancyGridViewModel
     {
         public PagedList<VacancyGridRow> Vacancies { get; set; }
-        public int TotalRecords { get; set; }
-
-    }
+        public string GridTitle { get; set; }
+}
 
     public class VacancyGridRow
     {

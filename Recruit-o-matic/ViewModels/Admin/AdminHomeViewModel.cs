@@ -1,4 +1,5 @@
-﻿using Recruit_o_matic.Models;
+﻿using Recruit_o_matic.Infrastructure;
+using Recruit_o_matic.Models;
 using Recruit_o_matic.Models.RavenDBIndexes;
 using System;
 using System.Collections.Generic;

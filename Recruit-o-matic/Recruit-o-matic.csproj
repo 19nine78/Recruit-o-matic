@@ -188,6 +188,8 @@
     <Compile Include="Models\RavenDBIndexes\Vacancies_WithApplicants.cs" />
     <Compile Include="Models\Vacancy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Interfaces\IVacancyService.cs" />
+    <Compile Include="Services\VacancyService.cs" />
     <Compile Include="ViewModels\Admin\DetailsViewModel.cs" />
     <Compile Include="ViewModels\Admin\AdminHomeViewModel.cs" />
     <Compile Include="ViewModels\Admin\VacancyGridViewModel.cs" />
