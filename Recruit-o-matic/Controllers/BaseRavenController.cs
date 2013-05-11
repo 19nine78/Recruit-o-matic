@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ServiceStack.Mvc;
 
 namespace Recruit_o_matic.Controllers
 {
-    public class BaseRavenController : Controller
+    public class BaseRavenController : ServiceStackController
     {
 
         public IDocumentSession RavenSession { get; protected set; }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            RavenSession = MvcApplication.Store.OpenSession();
+            //RavenSession = MvcApplication.Store.OpenSession();
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)

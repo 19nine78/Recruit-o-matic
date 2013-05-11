@@ -23,11 +23,11 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/
 
-        private IVacancyService _vacancyService;
+        private IVacancyService _vacancyService { get; set; }
 
         public AdminController()
         {
-            _vacancyService = new VacancyService(MvcApplication.Store.OpenSession());
+            //_vacancyService = new VacancyService();
         }
 
         public ActionResult Index(int page = 1, int pageSize = 3)

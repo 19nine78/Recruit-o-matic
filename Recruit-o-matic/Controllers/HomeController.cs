@@ -1,4 +1,5 @@
 ﻿using Recruit_o_matic.Models;
+using Recruit_o_matic.Services.Interfaces;
 using Recruit_o_matic.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,13 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Home/
 
+        private ITestService _testService { get; set; }
+
+        public HomeController(ITestService service)
+        {
+            _testService = service;
+        }
+
         public ActionResult Index()
         {
             var positions = RavenSession.Query<Vacancy>()
@@ -21,8 +29,10 @@ namespace Recruit_o_matic.Controllers
 
             var viewModel = new HomeViewModel()
             {
-                currentPositions = positions
+                currentPositions = positions,
             };
+
+            ViewData["test"] = _testService.Do("hello");
 
             return View(viewModel);
         }

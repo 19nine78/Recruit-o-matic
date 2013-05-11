@@ -15,11 +15,11 @@ namespace Recruit_o_matic.Services
 {
     public class VacancyService : IVacancyService
     {
-        private IDocumentSession _ravenSession;
+        private readonly IDocumentSession _ravenSession;
 
-        public VacancyService(IDocumentSession session)
+        public VacancyService()
         {
-            _ravenSession = session;
+           // this._ravenSession = session;
         }
 
         public VacancyGridViewModel BuildVacancyGridViewModel(int page, int pageSize)
