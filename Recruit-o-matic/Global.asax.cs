@@ -1,21 +1,16 @@
 ﻿using Funq;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Indexes;
 using Recruit_o_matic.Infrastructure;
-using Recruit_o_matic.Models.RavenDBIndexes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
+using Recruit_o_matic.Services;
+using Recruit_o_matic.Services.Interfaces;
+using ServiceStack.Logging;
+using ServiceStack.Logging.Support.Logging;
+using ServiceStack.Mvc;
+using ServiceStack.WebHost.Endpoints;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Recruit_o_matic.Services;
-using Recruit_o_matic.Services.Interfaces;
-using ServiceStack.Mvc;
-using ServiceStack.WebHost.Endpoints;
 
 namespace Recruit_o_matic
 {
@@ -31,44 +26,44 @@ namespace Recruit_o_matic
             public InfoAppHost()
                 : base("Services", typeof(MvcApplication).Assembly) { }
 
-            public override void Configure(Funq.Container container)
+            public override void Configure(Container container)
             {
-                 Store = new DocumentStore { ConnectionStringName = "RavenDB" };
-            //Store.Conventions.ShouldCacheRequest = (url) => false;
-            Store.Initialize();
-               // IndexCreation.CreateIndexes(typeof(Vacancies_WithApplicantCount).Assembly, Store);
-               // container.Register(Store);
+                Store = new DocumentStore { ConnectionStringName = "RavenDB" };
+                Store.Initialize();
+                // IndexCreation.CreateIndexes(typeof(Vacancies_WithApplicantCount).Assembly, Store);
                 container.Register<IDocumentStore>(c => Store);
-
-                container.Register(c => c.Resolve<IDocumentStore>().OpenSession())
+                container.Register(c => c.Resolve<IDocumentStore>()
+                                        .OpenSession())
                          .ReusedWithin(ReuseScope.Request);
 
-                //container.RegisterAutoWiredAs<VacancyService,IVacancyService>();
+                container.RegisterAutoWiredAs<VacancyService, IVacancyService>();
 
-                container.Register<ITestService>(c => new TestService());
+                container.RegisterAutoWiredAs<TestService,ITestService>();
 
                 ControllerBuilder.Current.SetControllerFactory(
                     new FunqControllerFactory(container));
+
+                LogManager.LogFactory = new ConsoleLogFactory();
             }
         }
 
-        public static DocumentStore Store; 
+        public static DocumentStore Store;
 
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            
+
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             AutoMapperBootStrapper.Bootstrap();
 
-           
 
-            
 
-            
+
+
+
 
             //Initialize your application
             var appHost = new InfoAppHost();

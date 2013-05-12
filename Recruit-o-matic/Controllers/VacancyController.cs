@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using Raven.Client;
 using Raven.Json.Linq;
 using Recruit_o_matic.Models;
 using Recruit_o_matic.ViewModels;
+using ServiceStack.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Recruit_o_matic.Controllers
@@ -16,6 +15,10 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Vacancy/
 
+        public ILog log { get; set; }
+
+        public IDocumentStore Store { get; set; }
+
         public ActionResult Index()
         {
             return View();
@@ -23,6 +26,7 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Details(string id)
         {
+            log.Debug("test!");
             var vacancy = RavenSession.Load<Vacancy>(id);
             var viewModel = new DetailsViewModel()
             {
@@ -38,6 +42,7 @@ namespace Recruit_o_matic.Controllers
         [HttpPost]
         public ActionResult Details([Bind(Prefix = "currentApplicant")]ApplyViewModel applicantVM)
         {
+
             if (ModelState.IsValid)
             {
 
@@ -49,17 +54,17 @@ namespace Recruit_o_matic.Controllers
                 if (applicantVM.File != null)
                 {
                     applicant.AttachementId = GenerateAttachementId(applicant.Id);
-                    Stream data = applicantVM.File.InputStream; 
-                   
+                    Stream data = applicantVM.File.InputStream;
+
                     //better way to get a reference to this?
-                    MvcApplication.Store
+                    Store
                                   .DatabaseCommands
                                   .PutAttachment(applicant.AttachementId, null, data, new RavenJObject { 
                                                                                                             {"Details","CV for vacancy " + applicant.VacancyId},
                                                                                                             {"ContentType",applicantVM.File.ContentType}
                                                                                                        });
                 }
-                    return RedirectToAction("/ThankYou");
+                return RedirectToAction("/ThankYou");
 
             }
             else
@@ -67,7 +72,7 @@ namespace Recruit_o_matic.Controllers
                 return RedirectToAction("");
             }
 
-            
+
         }
 
         public ActionResult ThankYou()

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Raven.Imports.Newtonsoft.Json;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Raven.Client;
-using Newtonsoft.Json;
 
 namespace Recruit_o_matic.Models
 {

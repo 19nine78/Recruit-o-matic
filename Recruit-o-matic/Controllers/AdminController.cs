@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Raven.Client;
+﻿using Raven.Abstractions.Data;
 using Raven.Client.Linq;
 using Recruit_o_matic.Models;
-using Recruit_o_matic.Services;
 using Recruit_o_matic.Services.Interfaces;
 using Recruit_o_matic.ViewModels.Admin;
-using Recruit_o_matic.Models.RavenDBIndexes;
-using Raven.Json.Linq;
+using System;
 using System.IO;
-using Raven.Abstractions.Data;
-using AutoMapper;
-using Recruit_o_matic.Infrastructure;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Recruit_o_matic.Controllers
 {
@@ -23,12 +15,7 @@ namespace Recruit_o_matic.Controllers
         //
         // GET: /Admin/
 
-        private IVacancyService _vacancyService { get; set; }
-
-        public AdminController()
-        {
-            //_vacancyService = new VacancyService();
-        }
+        public IVacancyService _vacancyService { get; set; }
 
         public ActionResult Index(int page = 1, int pageSize = 3)
         {

@@ -1,10 +1,6 @@
 ﻿using Raven.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using ServiceStack.Mvc;
+using System.Web.Mvc;
 
 namespace Recruit_o_matic.Controllers
 {
@@ -15,7 +11,7 @@ namespace Recruit_o_matic.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //RavenSession = MvcApplication.Store.OpenSession();
+            //RavenSession.
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
