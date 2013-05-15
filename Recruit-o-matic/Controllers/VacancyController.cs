@@ -26,7 +26,7 @@ namespace Recruit_o_matic.Controllers
 
         public ActionResult Details(string id)
         {
-            log.Debug("test!");
+            //log.Debug("test!");
             var vacancy = RavenSession.Load<Vacancy>(id);
             var viewModel = new DetailsViewModel()
             {
