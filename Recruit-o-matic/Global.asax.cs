@@ -1,7 +1,9 @@
 ﻿using Funq;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 using Recruit_o_matic.Infrastructure;
+using Recruit_o_matic.Models.RavenDBIndexes;
 using Recruit_o_matic.Services;
 using Recruit_o_matic.Services.Interfaces;
 using ServiceStack.Logging;
@@ -30,7 +32,8 @@ namespace Recruit_o_matic
             {
                 Store = new DocumentStore { ConnectionStringName = "RavenDB" };
                 Store.Initialize();
-                // IndexCreation.CreateIndexes(typeof(Vacancies_WithApplicantCount).Assembly, Store);
+                IndexCreation.CreateIndexes(typeof(Vacancies_WithApplicantCount).Assembly, Store);
+                
                 container.Register<IDocumentStore>(c => Store);
                 container.Register(c => c.Resolve<IDocumentStore>()
                                         .OpenSession())
@@ -58,12 +61,6 @@ namespace Recruit_o_matic
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             AutoMapperBootStrapper.Bootstrap();
-
-
-
-
-
-
 
             //Initialize your application
             var appHost = new InfoAppHost();
